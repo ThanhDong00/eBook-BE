@@ -38,14 +38,27 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
+
 builder.Services.AddApplicationServices();
 builder.AddEntityFrameworkCore();
 builder.AddAppAuthorization();
 builder.Services.AddAutoMapper(typeof(IMappingMarker));
 
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000") 
+              .AllowAnyHeader() 
+              .AllowAnyMethod(); 
+    });
+});
 
 var app = builder.Build();
+
+app.UseCors("AllowSpecificOrigins");
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
