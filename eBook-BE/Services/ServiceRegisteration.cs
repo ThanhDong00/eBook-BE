@@ -21,6 +21,7 @@ namespace eBook_BE.Services
             services.AddScoped<IAuthService, AuthService>();    
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IClaimService, ClaimService>();
+            services.AddScoped<IProfileService, ProfileService>();
         }
     }
 }
