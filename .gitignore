@@ -1,2 +1,15 @@
-.vs
+# Build results
+bin/
+obj/
+out/
+
+# Visual Studio
+.vs/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Secrets
 appsettings.json
+appsettings.*.json
