@@ -4,8 +4,9 @@ using eBook_BE.Dtos.Publisher;
 
 namespace eBook_BE.Dtos.Book
 {
-    public class BookDto : BaseResponseDto
+    public class BookWithDetailsDto
     {
+        public Guid Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public int PublicationYear { get; set; }

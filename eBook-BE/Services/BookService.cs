@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using eBook_BE.Data;
+using eBook_BE.Dtos.Author;
 using eBook_BE.Dtos.Book;
+using eBook_BE.Dtos.Category;
 using eBook_BE.Models;
 using eBook_BE.Services.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -50,6 +52,8 @@ namespace eBook_BE.Services
             var query = _context.Books
                 .Where(b => !b.IsDeleted)
                 .Include(b => b.Publisher)
+                .Include(b => b.BookAuthors).ThenInclude(ba => ba.Author)
+                .Include(b => b.BookCategories).ThenInclude(bc => bc.Category)
                 .AsQueryable();
 
             if (filterDto.CategoryId.HasValue)
@@ -82,7 +86,18 @@ namespace eBook_BE.Services
                 .Take(pageSize)
                 .ToListAsync();
 
-            return _mapper.Map<List<BookDto>>(books);
+            var bookDtos = _mapper.Map<List<BookDto>>(books);
+            foreach (var bookDto in bookDtos)
+            {
+                var book = books.FirstOrDefault(b => b.Id == bookDto.Id);
+                if (book != null)
+                {
+                    bookDto.Authors = book.BookAuthors.Select(ba => _mapper.Map<AuthorDto>(ba.Author)).ToList();
+                    bookDto.Categories = book.BookCategories.Select(bc => _mapper.Map<CategoryDto>(bc.Category)).ToList();
+                }
+            }
+
+            return bookDtos;
         }
 
         public async Task<BookDto> GetBookByIdAsync(Guid id)
@@ -137,5 +152,25 @@ namespace eBook_BE.Services
 
             return _mapper.Map<BookDto>(book);
         }
+
+        //public async Task<BookWithDetailsDto> GetBookWithDetailsAsync(Guid id)
+        //{
+        //    var book = await _context.Books
+        //        .Include(b => b.Publisher)
+        //        .Include(b => b.BookAuthors).ThenInclude(ba => ba.Author)
+        //        .Include(b => b.BookCategories).ThenInclude(bc => bc.Category)
+        //        .FirstOrDefaultAsync(b => b.Id == id);
+
+        //    if (book == null)
+        //    {
+        //        throw new KeyNotFoundException("Book not found");
+        //    }
+
+        //    var bookWithDetailsDto = _mapper.Map<BookWithDetailsDto>(book);
+        //    bookWithDetailsDto.Authors = book.BookAuthors.Select(ba => _mapper.Map<AuthorDto>(ba.Author)).ToList();
+        //    bookWithDetailsDto.Categories = book.BookCategories.Select(bc => _mapper.Map<CategoryDto>(bc.Category)).ToList();
+
+        //    return bookWithDetailsDto;
+        //}
     }
 }

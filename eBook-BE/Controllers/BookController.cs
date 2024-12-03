@@ -134,5 +134,23 @@ namespace eBook_BE.Controllers
             }
         }
 
+        //[HttpGet]
+        //[Route("{id}/details")]
+        //public async Task<IActionResult> GetBookWithDetailsAsync(Guid id)
+        //{
+        //    ApiResponse<BookWithDetailsDto> apiResponse = new();
+
+        //    try
+        //    {
+        //        apiResponse.Data = await _bookService.GetBookWithDetailsAsync(id);
+        //        return Ok(apiResponse);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        apiResponse.ErrorMessage = ex.Message;
+        //        apiResponse.IsSuccess = false;
+        //        return BadRequest(apiResponse);
+        //    }
+        //}
     }
 }

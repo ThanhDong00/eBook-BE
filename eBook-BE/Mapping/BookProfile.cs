@@ -12,6 +12,8 @@ namespace eBook_BE.Mapping
             CreateMap<CreateBookDto, Book>();
             CreateMap<UpdateBookDto, Book>();
             CreateMap<Book, BookDto>();
+
+            CreateMap<Book, BookWithDetailsDto>();
         }
     }
 }
