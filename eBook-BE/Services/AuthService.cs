@@ -86,7 +86,9 @@ namespace eBook_BE.Services
 
             if (!result.Succeeded)
             {
-                throw new Exception("Register failed");
+                //throw new Exception("Register failed");
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                throw new Exception($"Register failed: {errors}");
             }
 
             await _userManager.AddToRoleAsync(newUser, Roles.User);
