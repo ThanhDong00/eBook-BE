@@ -116,7 +116,10 @@ namespace eBook_BE.Services
 
         public async Task<BookDto> UpdateBookAsync(Guid id, UpdateBookDto updateBookDto)
         {
-            var book = await _context.Books.FindAsync(id);
+            var book = await _context.Books
+                .Include(b => b.BookAuthors)
+                .Include(b => b.BookCategories)
+                .FirstOrDefaultAsync(b => b.Id == id);
 
             if (book == null)
             {
@@ -132,6 +135,45 @@ namespace eBook_BE.Services
             }
 
             book.Publisher = publisher;
+
+            // Update authors
+            if (updateBookDto.AuthorIds != null)
+            {
+                book.BookAuthors.Clear();
+                foreach (var authorId in updateBookDto.AuthorIds)
+                {
+                    var author = await _context.Authors.FindAsync(authorId);
+                    if (author == null)
+                    {
+                        throw new KeyNotFoundException($"Author with ID {authorId} not found");
+                    }
+
+                    book.BookAuthors.Add(new BookAuthor
+                    {
+                        BookId = book.Id,
+                        AuthorId = authorId,
+                    });
+                }
+            }
+
+            // Update categories
+            if (updateBookDto.CategoryIds != null)
+            {
+                book.BookCategories.Clear();
+                foreach (var categoryId in updateBookDto.CategoryIds)
+                {
+                    var category = await _context.Categories.FindAsync(categoryId);
+                    if (category == null)
+                    {
+                        throw new KeyNotFoundException($"Category with ID {categoryId} not found");
+                    }
+                    book.BookCategories.Add(new BookCategory
+                    {
+                        BookId = book.Id,
+                        CategoryId = categoryId
+                    });
+                }
+            }
 
             await _context.SaveChangesAsync();
 
