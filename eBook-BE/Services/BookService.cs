@@ -104,6 +104,8 @@ namespace eBook_BE.Services
         {
             var book = await _context.Books
                 .Include(b => b.Publisher)
+                .Include(b => b.BookAuthors).ThenInclude(ba => ba.Author)
+                .Include(b => b.BookCategories).ThenInclude(bc => bc.Category)
                 .FirstOrDefaultAsync(b => b.Id == id);
 
             if (book == null)
@@ -111,7 +113,11 @@ namespace eBook_BE.Services
                 throw new KeyNotFoundException("Book not found");
             }
 
-            return _mapper.Map<BookDto>(book);
+            var bookDto = _mapper.Map<BookDto>(book);
+            bookDto.Authors = book.BookAuthors.Select(ba => _mapper.Map<AuthorDto>(ba.Author)).ToList();
+            bookDto.Categories = book.BookCategories.Select(bc => _mapper.Map<CategoryDto>(bc.Category)).ToList();
+
+            return bookDto;
         }
 
         public async Task<BookDto> UpdateBookAsync(Guid id, UpdateBookDto updateBookDto)
