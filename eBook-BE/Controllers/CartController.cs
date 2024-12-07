@@ -9,19 +9,17 @@ namespace eBook_BE.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
     public class CartController : ControllerBase
     {
         private readonly ICartService _cartService;
-        private readonly IClaimService _claimService;
+        //private readonly IClaimService _claimService;
         public CartController(ICartService cartService, IClaimService claimService)
         {
-            _claimService = claimService;
+            //_claimService = claimService;
             _cartService = cartService;
         }
 
         [HttpPost]
-        [AllowAnonymous]
         public async Task<IActionResult> CreateCartAsync([FromBody] CreateCartDto createCartDto)
         {
             ApiResponse<CartDto> response = new();
@@ -57,13 +55,13 @@ namespace eBook_BE.Controllers
         }
 
         [HttpGet]
-        [Route("user")]
-        public async Task<IActionResult> GetCartByUserIdAsync()
+        [Route("user/{userId}")]
+        public async Task<IActionResult> GetCartByUserIdAsync(Guid userId)
         {
             ApiResponse<CartDto> response = new();
             try
             {
-                var userId = Guid.Parse(_claimService.GetUserId());
+                //var userId = Guid.Parse(_claimService.GetUserId());
                 response.Data = await _cartService.GetCartByUserIdAsync(userId);
                 return Ok(response);
             }
