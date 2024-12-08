@@ -60,12 +60,15 @@ namespace eBook_BE.Services
 
         public async Task<CartDto> GetCartByUserIdAsync(Guid userId)
         {
-            var cart = await _context.Carts.FirstOrDefaultAsync(c => c.UserId == userId && !c.IsDeleted);
+            var cart = await _context.Carts
+                .Include(c => c.CartItems).ThenInclude(ci => ci.Book)
+                .FirstOrDefaultAsync(c => c.UserId == userId && !c.IsDeleted);
 
             if (cart == null)
             {
                 throw new KeyNotFoundException("Cart not found");
             }
+
             return _mapper.Map<CartDto>(cart);
         }
 

@@ -32,7 +32,9 @@ namespace eBook_BE.Services
 
         public async Task<CartItemDto> GetCartItemByIdAsync(Guid id)
         {
-            var cartItem = await _context.CartItems.FindAsync(id);
+            var cartItem = await _context.CartItems
+                .Include(ci => ci.Book)
+                .FirstOrDefaultAsync(ci => ci.Id == id);
             if (cartItem == null)
             {
                 throw new KeyNotFoundException("CartItem not found");
