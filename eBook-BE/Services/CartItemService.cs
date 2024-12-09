@@ -74,6 +74,14 @@ namespace eBook_BE.Services
             return _mapper.Map<CartItemDto>(cartItem);
         }
 
+        public async Task<CartItemDto> GetCartItemByCartIdAndBookIdAsync(Guid cartId, Guid bookId)
+        {
+            var cartItem = await _context.CartItems
+                .FirstOrDefaultAsync(ci => ci.CartId == cartId && ci.BookId == bookId);
+
+            return _mapper.Map<CartItemDto>(cartItem);
+        }
+
         public async Task<CartItemDto> DeleteCartItemAsync(Guid id)
         {
             var cartItem = await _context.CartItems.FindAsync(id);

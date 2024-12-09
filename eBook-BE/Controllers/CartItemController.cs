@@ -86,6 +86,24 @@ namespace eBook_BE.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("cartId/{cartId}/bookId/{bookId}")]
+        public async Task<IActionResult> GetCartItemByCartIdAndBookIdAsync(Guid cartId, Guid bookId)
+        {
+            ApiResponse<CartItemDto> response = new();
+            try
+            {
+                response.Data = await _cartItemService.GetCartItemByCartIdAndBookIdAsync(cartId, bookId);
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                response.IsSuccess = false;
+                response.ErrorMessage = e.Message;
+                return BadRequest(response);
+            }
+        }
+
         [HttpPut]
         [Route("{id}")]
         public async Task<IActionResult> UpdateCartItemAsync(Guid id,[FromBody] UpdateCartItemDto updateCartItemDto)
