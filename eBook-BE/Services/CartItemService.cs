@@ -46,7 +46,7 @@ namespace eBook_BE.Services
         public async Task<List<CartItemDto>> GetCartItemsByCartIdAsync(Guid cartId)
         {
             var cartItems = await _context.CartItems
-                .Where(c => c.CartId == cartId)
+                .Where(c => c.CartId == cartId && !c.IsDeleted)
                 .ToListAsync();
 
             return _mapper.Map<List<CartItemDto>>(cartItems);
