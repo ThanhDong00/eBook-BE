@@ -9,7 +9,7 @@ namespace eBook_BE.Dtos.OrderItem
         public decimal PriceAtTime { get; set; }
 
         public Guid OrderId { get; set; }
-        public OrderDto Order { get; set; }
+        //public OrderDto Order { get; set; }
 
         public Guid BookId { get; set; }
         public BookDto Book { get; set; }

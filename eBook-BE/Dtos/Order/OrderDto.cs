@@ -1,4 +1,5 @@
-﻿using eBook_BE.Models;
+﻿using eBook_BE.Dtos.OrderItem;
+using eBook_BE.Models;
 
 namespace eBook_BE.Dtos.Order
 {
@@ -10,5 +11,6 @@ namespace eBook_BE.Dtos.Order
 
         public Guid UserId { get; set; }
         public UserApplication User { get; set; }
+        public List<OrderItemDto> OrderItems { get; set; }
     }
 }
