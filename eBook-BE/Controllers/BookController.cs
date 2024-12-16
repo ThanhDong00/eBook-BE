@@ -152,5 +152,24 @@ namespace eBook_BE.Controllers
         //        return BadRequest(apiResponse);
         //    }
         //}
+
+        [HttpPatch]
+        [Route("{id}/stock/subtract")]
+        public async Task<IActionResult> UpdateBookStockQuantityAsync(Guid id, [FromBody] UpdateBookQuantity updateBookQuantity)
+        {
+            ApiResponse<BookDto> apiResponse = new();
+
+            try
+            {
+                apiResponse.Data = await _bookService.UpdateBookStockQuantityAsync(id, updateBookQuantity);
+                return Ok(apiResponse);
+            }
+            catch (Exception ex)
+            {
+                apiResponse.ErrorMessage = ex.Message;
+                apiResponse.IsSuccess = false;
+                return BadRequest(apiResponse);
+            }
+        }
     }
 }

@@ -11,6 +11,6 @@ namespace eBook_BE.Services.Interface
         Task<BookDto> CreateBookAsync(CreateBookDto createBookDto);
         Task<BookDto> UpdateBookAsync(Guid id, UpdateBookDto updateBookDto);
         Task<BookDto> DeleteBookAsync(Guid id);
-
+        Task<BookDto> UpdateBookStockQuantityAsync(Guid id, UpdateBookQuantity updateBookQuantity);
     }
 }

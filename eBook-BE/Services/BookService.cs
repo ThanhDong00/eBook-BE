@@ -220,5 +220,24 @@ namespace eBook_BE.Services
 
         //    return bookWithDetailsDto;
         //}
+
+        public async Task<BookDto> UpdateBookStockQuantityAsync(Guid id, UpdateBookQuantity updateBookQuantity)
+        {
+            var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == id);
+            if (book == null)
+            {
+                throw new KeyNotFoundException("Book not found");
+            }
+
+            if (book.StockQuantity < updateBookQuantity.quantityToSubtract)
+            {
+                throw new InvalidOperationException("Insufficient stock quantity");
+            }
+
+            book.StockQuantity -= updateBookQuantity.quantityToSubtract;
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<BookDto>(book);
+        }
     }
 }
