@@ -40,10 +40,9 @@ namespace eBook_BE.Services
                 .Include(b => b.BookCategories)
                     .ThenInclude(bc => bc.Category)
                 .Include(b => b.BookAuthors)
-                    .ThenInclude(ba => ba.Author)   
+                    .ThenInclude(ba => ba.Author)
                 .ToListAsync();
-
-            // Simple content-based filtering: recommend books with the same publisher or category
+                
             var filteredBooks = recommendedBooks
                 .Where(b => b.PublisherId == book.PublisherId ||
                             b.BookCategories.Any(bc => book.BookCategories.Select(c => c.CategoryId).Contains(bc.CategoryId)) ||
