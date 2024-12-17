@@ -27,7 +27,7 @@ To install and run the project locally, follow these steps:
 
 ## Swagger
 
-![Home](./demo_ui/home.png)
+![Home](./demo_ui/swagger.png)
 
 
 ## Authors
